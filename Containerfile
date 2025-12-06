@@ -8,6 +8,7 @@ RUN apk add php84 \
             php84-gd \
             php84-iconv \
             libxml2 \
+            php84-xml \
             php84-mbstring \
             php84-openssl \
             php84-posix \
@@ -25,6 +26,7 @@ RUN apk add php84 \
             php84-pecl-apcu \
             ffmpeg \
             php84-pecl-imagick \
+            php84-fpm \
             nginx \
             supervisor \
             gpg \
@@ -102,3 +104,19 @@ RUN gpg --verify latest.tar.bz2.asc
 
 # Extract the archive
 RUN tar -xvf latest.tar.bz2
+RUN chown -R nginx:nginx nextcloud
+
+# Cleanup
+RUN rm latest.tar.bz2 latest.tar.bz2.asc latest.tar.bz2.sha256
+
+##########################
+### Configuration time ###
+##########################
+
+COPY nginx.conf /etc/nginx/http.d/nextcloud.conf
+COPY supervisord.conf /etc/supervisord.conf
+COPY fpm.conf /etc/fpm.conf
+RUN mkdir -p /var/run/php
+RUN chown -R nginx:nginx /var/run/php
+
+CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisord.conf" ]
