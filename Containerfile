@@ -114,6 +114,7 @@ RUN rm latest.tar.bz2 latest.tar.bz2.asc latest.tar.bz2.sha256
 ##########################
 
 COPY nginx.conf /etc/nginx/http.d/nextcloud.conf
+RUN rm /etc/nginx/http.d/default.conf
 COPY supervisord.conf /etc/supervisord.conf
 COPY fpm.conf /etc/fpm.conf
 RUN mkdir -p /var/run/php
