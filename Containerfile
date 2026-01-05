@@ -106,8 +106,8 @@ RUN gpg --verify latest.tar.bz2.asc
 RUN tar -xvf latest.tar.bz2
 RUN chown -R nginx:nginx nextcloud
 
-# Cleanup
-RUN rm latest.tar.bz2 latest.tar.bz2.asc latest.tar.bz2.sha256
+# Cleanup, but don't remove the tarball itself
+RUN rm latest.tar.bz2.asc latest.tar.bz2.sha256
 
 ##########################
 ### Configuration time ###
@@ -120,5 +120,7 @@ COPY fpm.conf /etc/fpm.conf
 RUN mkdir -p /var/run/php
 RUN chown -R nginx:nginx /var/run/php
 RUN mkdir -p /var/log/nginx
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisord.conf" ]
+CMD [ "/usr/local/bin/entrypoint.sh" ]
