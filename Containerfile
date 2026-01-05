@@ -119,5 +119,6 @@ COPY supervisord.conf /etc/supervisord.conf
 COPY fpm.conf /etc/fpm.conf
 RUN mkdir -p /var/run/php
 RUN chown -R nginx:nginx /var/run/php
+RUN mkdir -p /var/log/nginx
 
 CMD [ "/usr/bin/supervisord", "-c", "/etc/supervisord.conf" ]
